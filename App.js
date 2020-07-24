@@ -1,22 +1,20 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { View, Text, StyleSheet } from "react-native";
+import AuthNavigator from "./src/navigation";
+import firebase from "firebase";
+import { firebaseConfig } from "./src/firebaseConfig";
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <>
       <StatusBar style="auto" />
-      <Text>App</Text>
-    </View>
+      <AuthNavigator />
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default App;
