@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-const RequestFriend = () => {
+const FriendRequest = () => {
   return (
     <View
       style={{
@@ -11,9 +11,9 @@ const RequestFriend = () => {
         backgroundColor: "#fcfcfc",
       }}
     >
-      <Text>RequestFriend</Text>
+      <Text>FriendRequest</Text>
     </View>
   );
 };
 
-export default RequestFriend;
+export default FriendRequest;
