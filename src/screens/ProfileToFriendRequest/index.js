@@ -50,7 +50,7 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
     });
   }, []);
 
-  function sendFriendRequest() {
+  const sendFriendRequest = () => {
     const receivedFriendRequest = {
       uid: userUid,
     };
@@ -63,7 +63,7 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
 
     Alert.alert("", "Pedido de amizade enviado com sucesso!");
     navigation.goBack();
-  }
+  };
 
   return (
     <>
@@ -97,7 +97,7 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
                       style={styles.userImage}
                     />
                   ) : (
-                    <UserImage size={200} />
+                    <UserImage size={190} />
                   )}
                 </View>
                 <View style={styles.halfContainer}>

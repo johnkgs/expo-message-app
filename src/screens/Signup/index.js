@@ -31,18 +31,18 @@ const Signup = () => {
   const [translate] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    function animatedInput() {
+    const animatedInput = () => {
       Animated.timing(translate, {
         toValue: 100,
         duration: 500,
         useNativeDriver: true,
       }).start();
       setToggleEdit(true);
-    }
+    };
     animatedInput();
   }, []);
 
-  async function handleSignUp(values) {
+  const handleSignUp = async (values) => {
     const { password, name, surname, email } = values;
 
     setToggleEdit(false);
@@ -59,8 +59,8 @@ const Signup = () => {
 
         userData.set({
           uid: userCredentials.user.uid,
-          name: name,
-          surname: surname,
+          name: name.toLowerCase(),
+          surname: surname.toLowerCase(),
           userImage: "",
         });
       })
@@ -77,17 +77,17 @@ const Signup = () => {
         setLoading(false);
         Alert.alert("", errorMessage);
       });
-  }
+  };
 
-  function toggleEyeIcon() {
+  const toggleEyeIcon = () => {
     setToggleVisibility(!toggleVisibility);
     setIconName(iconName === "ios-eye" ? "ios-eye-off" : "ios-eye");
-  }
+  };
 
-  function toggleEyeIcon2() {
+  const toggleEyeIcon2 = () => {
     setToggleVisibility2(!toggleVisibility2);
     setIconName2(iconName2 === "ios-eye" ? "ios-eye-off" : "ios-eye");
-  }
+  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

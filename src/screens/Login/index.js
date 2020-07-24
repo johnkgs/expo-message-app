@@ -35,14 +35,14 @@ const Login = ({ navigation }) => {
   );
 
   useEffect(() => {
-    function animatedInput() {
+    const animatedInput = () => {
       Animated.timing(translate, {
         toValue: 100,
         duration: 500,
         useNativeDriver: true,
       }).start();
       setToggleEdit(true);
-    }
+    };
     animatedInput();
   }, []);
 
@@ -55,13 +55,13 @@ const Login = ({ navigation }) => {
       keyboardEvent(e, false)
     );
 
-    return function cleanup() {
+    return () => {
       keyboardShowListener.remove();
       keyboardHideListener.remove();
     };
   }, []);
 
-  function keyboardEvent(event, isShow) {
+  const keyboardEvent = (event, isShow) => {
     let heightOS = 0;
 
     Animated.timing(keyboardHeight, {
@@ -69,9 +69,9 @@ const Login = ({ navigation }) => {
       toValue: isShow ? heightOS : 200,
       useNativeDriver: false,
     }).start();
-  }
+  };
 
-  async function handleLogin(values) {
+  const handleLogin = async (values) => {
     const { email, password } = values;
 
     setToggleEdit(false);
@@ -95,16 +95,16 @@ const Login = ({ navigation }) => {
         }
         Alert.alert("", errorMessage);
       });
-  }
+  };
 
-  function toggleEyeIcon() {
+  const toggleEyeIcon = () => {
     setToggleVisibility(!toggleVisibility);
     setIconName(iconName === "ios-eye" ? "ios-eye-off" : "ios-eye");
-  }
+  };
 
-  function goToSignup() {
+  const goToSignup = () => {
     navigation.navigate("Signup");
-  }
+  };
 
   return (
     <View style={[styles.container]}>

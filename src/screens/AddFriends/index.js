@@ -27,7 +27,7 @@ const AddFriends = ({ navigation }) => {
       }
     });
 
-    return function cleanup() {
+    return () => {
       isMounted = false;
       setUsers([]);
     };
@@ -37,54 +37,52 @@ const AddFriends = ({ navigation }) => {
     return item.name.indexOf(searchText) >= 0;
   });
 
-  function renderData({ item }) {
-    return (
-      <>
-        {!!searchText && (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("ProfileToFriendRequest", item);
-              setSearchText("");
-            }}
-            style={[
-              styles.userContainer,
-              {
-                backgroundColor: "#ededed",
-                borderBottomColor: "#137b9c",
-              },
-            ]}
-          >
-            <View style={styles.userImageContainer}>
-              {item.userImage ? (
-                <Image
-                  resizeMode="cover"
-                  source={{
-                    uri: item.userImage,
-                  }}
-                  style={styles.userImage}
-                />
-              ) : (
-                <UserImage size={48} />
-              )}
-            </View>
-            <View style={styles.nameContainer}>
-              <Text
-                numberOfLines={2}
-                style={[
-                  styles.nameTextContainer,
-                  {
-                    color: "#000000",
-                  },
-                ]}
-              >
-                {item.name} {item.surname}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      </>
-    );
-  }
+  const renderData = ({ item }) => (
+    <>
+      {!!searchText && (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ProfileToFriendRequest", item);
+            setSearchText("");
+          }}
+          style={[
+            styles.userContainer,
+            {
+              backgroundColor: "#ededed",
+              borderBottomColor: "#137b9c",
+            },
+          ]}
+        >
+          <View style={styles.userImageContainer}>
+            {item.userImage ? (
+              <Image
+                resizeMode="cover"
+                source={{
+                  uri: item.userImage,
+                }}
+                style={styles.userImage}
+              />
+            ) : (
+              <UserImage size={46} />
+            )}
+          </View>
+          <View style={styles.nameContainer}>
+            <Text
+              numberOfLines={2}
+              style={[
+                styles.nameTextContainer,
+                {
+                  color: "#000000",
+                },
+              ]}
+            >
+              {item.name} {item.surname}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+    </>
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
@@ -100,7 +98,7 @@ const AddFriends = ({ navigation }) => {
         <CustomInput
           returnKeyType="search"
           placeholder="Buscar amigo..."
-          onChangeText={(text) => setSearchText(text.toLowerCase())}
+          onChangeText={(text) => setSearchText(text)}
           style={[
             styles.input,
             {

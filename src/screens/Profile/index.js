@@ -32,12 +32,12 @@ const Profile = ({ navigation }) => {
     loadUserData();
     getPhotoPermissions();
 
-    return function cleanup() {
+    return () => {
       loadingImageRef.current = false;
     };
   }, []);
 
-  async function getPhotoPermissions() {
+  const getPhotoPermissions = async () => {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
@@ -45,9 +45,9 @@ const Profile = ({ navigation }) => {
         Alert.alert("", "Nós precisamos do acesso á sua galeria de fotos.");
       }
     }
-  }
+  };
 
-  async function loadUserData() {
+  const loadUserData = async () => {
     await userData
       .child(userUid)
       .once("value")
@@ -56,17 +56,17 @@ const Profile = ({ navigation }) => {
         setSurname(snapshot.val().surname);
         setUserImage(snapshot.val().userImage);
       });
-  }
+  };
 
-  function uriToBlob(uri) {
+  const uriToBlob = (uri) => {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.onload = function () {
+      xhr.onload = () => {
         resolve(xhr.response);
       };
 
-      xhr.onerror = function () {
+      xhr.onerror = () => {
         reject(new Error("utiToBlob falhou"));
       };
 
@@ -76,16 +76,16 @@ const Profile = ({ navigation }) => {
 
       xhr.send();
     });
-  }
+  };
 
-  function uploadToFirebase(blob) {
+  const uploadToFirebase = (blob) => {
     var storageRef = imageStorage.child(`imageData/${userUid}.jpg`).put(blob, {
       contentType: "image/jpeg",
     });
 
     storageRef.on(
       "state_changed",
-      function (snapshot) {
+      (snapshot) => {
         if (loadingImageRef.current) {
           setShowProgressBar(true);
           var progress = snapshot.bytesTransferred / snapshot.totalBytes;
@@ -97,7 +97,7 @@ const Profile = ({ navigation }) => {
           storageRef.pause();
         }
       },
-      function (error) {
+      (error) => {
         switch (error.code) {
           case "storage/unauthorized":
             break;
@@ -109,7 +109,7 @@ const Profile = ({ navigation }) => {
             break;
         }
       },
-      function () {
+      () => {
         imageStorage
           .child(`imageData/${userUid}.jpg`)
           .getDownloadURL()
@@ -124,14 +124,14 @@ const Profile = ({ navigation }) => {
               Alert.alert("", "Imagem salva com sucesso!");
             }
           })
-          .catch(function (error) {
+          .catch((error) => {
             throw error;
           });
       }
     );
-  }
+  };
 
-  async function handleImagePicker() {
+  const handleImagePicker = async () => {
     await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -150,7 +150,7 @@ const Profile = ({ navigation }) => {
       .catch((error) => {
         throw error;
       });
-  }
+  };
 
   return (
     <>

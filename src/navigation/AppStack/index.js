@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-
 import { Image, TouchableOpacity, Text, View } from "react-native";
-
 import Menu from "react-native-material-menu";
 import { TouchableRipple } from "react-native-paper";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import logo from "../../assets/logo.png";
 
 import Profile from "../../screens/Profile";
 import AddFriends from "../../screens/AddFriends";
@@ -16,11 +16,14 @@ import ProfileToFriendRequest from "../../screens/ProfileToFriendRequest";
 import FriendRequest from "../../screens/FriendRequest";
 import Friends from "../../screens/Friends";
 import Logout from "../../screens/Logout";
+import Chat from "../../screens/Chat";
+
+import logo from "../../assets/logo.png";
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-function BottomTabs() {
+const BottomTabs = () => {
   return (
     <Tab.Navigator barStyle={{ backgroundColor: "#137B9C" }}>
       <Tab.Screen
@@ -45,7 +48,7 @@ function BottomTabs() {
       />
     </Tab.Navigator>
   );
-}
+};
 
 const AppStack = ({ navigation }) => {
   const menuRef = useRef(null);
@@ -53,7 +56,13 @@ const AppStack = ({ navigation }) => {
   const closeMenu = () => menuRef.current.hide();
 
   return (
-    <Stack.Navigator initialRouteName="Friends">
+    <Stack.Navigator
+      initialRouteName="Friends"
+      screenOptions={{
+        gestureDirection: "horizontal",
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+    >
       <Stack.Screen
         name="BottomTabs"
         component={BottomTabs}
@@ -158,6 +167,7 @@ const AppStack = ({ navigation }) => {
         name="ProfileToFriendRequest"
         component={ProfileToFriendRequest}
       />
+      <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
 };
