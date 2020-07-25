@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -21,10 +22,16 @@ export default StyleSheet.create({
     height: undefined,
     width: undefined,
   },
+  titleContainer: {
+    maxWidth: width - 160,
+    width: 0,
+    flexGrow: 1,
+    flex: 1,
+    marginLeft: 10,
+  },
   title: {
     textTransform: "capitalize",
     fontSize: 20,
-    marginLeft: 10,
   },
   messageContainer: {
     flexDirection: "row",

@@ -35,9 +35,11 @@ const Chat = ({ navigation, route }) => {
               <UserImage size={34} />
             )}
           </View>
-          <Text style={styles.title}>
-            {user.name} {user.surname}
-          </Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title} numberOfLines={1}>
+              {user.name} {user.surname}
+            </Text>
+          </View>
         </View>
       ),
     });
