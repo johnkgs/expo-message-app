@@ -4,6 +4,8 @@ import firebase from "firebase";
 import Loading from "../../components/Loading";
 
 const Logout = () => {
+  const userData = firebase.database().ref("users");
+
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
@@ -11,6 +13,10 @@ const Logout = () => {
     );
 
     async function logout() {
+      await userData.child(firebase.auth().currentUser.uid).update({
+        status: "offline",
+      });
+
       await firebase.auth().signOut();
     }
 
