@@ -7,7 +7,6 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { Image, TouchableOpacity, Text, View } from "react-native";
 import Menu from "react-native-material-menu";
 import { TouchableRipple } from "react-native-paper";
-
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
 import Profile from "../../screens/Profile";
@@ -18,14 +17,17 @@ import Friends from "../../screens/Friends";
 import Logout from "../../screens/Logout";
 import Chat from "../../screens/Chat";
 
+import { useStateValue } from "../../state/ContextProvider";
 import logo from "../../assets/logo.png";
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomTabs = () => {
+  const [state] = useStateValue();
+
   return (
-    <Tab.Navigator barStyle={{ backgroundColor: "#137B9C" }}>
+    <Tab.Navigator barStyle={{ backgroundColor: state.theme.primary }}>
       <Tab.Screen
         name="Amigos"
         component={Friends}
@@ -51,6 +53,7 @@ const BottomTabs = () => {
 };
 
 const AppStack = ({ navigation }) => {
+  const [state] = useStateValue();
   const menuRef = useRef(null);
   const openMenu = () => menuRef.current.show();
   const closeMenu = () => menuRef.current.hide();
@@ -67,24 +70,20 @@ const AppStack = ({ navigation }) => {
         name="BottomTabs"
         component={BottomTabs}
         options={{
-          headerTintColor: "#000000",
-          headerStyle: {
-            backgroundColor: "#fcfcfc",
-          },
           headerLeft: () => <Image source={logo} style={{ marginLeft: 16 }} />,
           title: "MessageApp",
           headerRight: () => (
             <Menu
               ref={menuRef}
               style={{
-                backgroundColor: "#fcfcfc",
+                backgroundColor: state.theme.background,
               }}
               button={
                 <TouchableOpacity onPress={openMenu}>
                   <Entypo
                     name="dots-three-vertical"
                     size={24}
-                    color="#000000"
+                    color={state.theme.onBackground}
                     style={{ marginRight: 16 }}
                   />
                 </TouchableOpacity>
@@ -96,14 +95,18 @@ const AppStack = ({ navigation }) => {
                   navigation.navigate("Profile");
                   closeMenu();
                 }}
-                rippleColor="#d4d4d4"
+                rippleColor={state.theme.rippleColor}
               >
                 <View style={{ flexDirection: "row" }}>
-                  <Ionicons name="ios-person" color="#000000" size={20} />
+                  <Ionicons
+                    name="ios-person"
+                    color={state.theme.onBackground}
+                    size={20}
+                  />
                   <Text
                     numberOfLines={1}
                     style={{
-                      color: "#000000",
+                      color: state.theme.onBackground,
                       fontSize: 16,
                       marginLeft: 10,
                     }}
@@ -122,14 +125,18 @@ const AppStack = ({ navigation }) => {
                   navigation.navigate("AddFriends");
                   closeMenu();
                 }}
-                rippleColor="#d4d4d4"
+                rippleColor={state.theme.rippleColor}
               >
                 <View style={{ flexDirection: "row" }}>
-                  <Ionicons name="ios-people" color="#000000" size={20} />
+                  <Ionicons
+                    name="ios-people"
+                    color={state.theme.onBackground}
+                    size={20}
+                  />
                   <Text
                     numberOfLines={1}
                     style={{
-                      color: "#000000",
+                      color: state.theme.onBackground,
                       fontSize: 16,
                       marginLeft: 10,
                     }}
@@ -157,17 +164,17 @@ const AppStack = ({ navigation }) => {
         }}
       />
       <Stack.Screen
+        name="ProfileToFriendRequest"
+        component={ProfileToFriendRequest}
+      />
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen
         name="Logout"
         component={Logout}
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="ProfileToFriendRequest"
-        component={ProfileToFriendRequest}
-      />
-      <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
 };

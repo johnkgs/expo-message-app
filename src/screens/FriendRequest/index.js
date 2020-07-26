@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, Text, TouchableOpacity, Image } from "react-native";
 import firebase from "firebase";
-
 import { Ionicons } from "@expo/vector-icons";
+
 import UserImage from "../../components/UserImage";
 import Loading from "../../components/Loading";
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const FriendRequest = () => {
+  const [state] = useStateValue();
   const [friendRequestList, setFriendRequestList] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -23,6 +25,7 @@ const FriendRequest = () => {
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
 
     friendRequestData.on("value", (snapshot) => {
       if (snapshot.exists()) {
@@ -93,8 +96,8 @@ const FriendRequest = () => {
       style={[
         styles.userContainer,
         {
-          backgroundColor: "#ededed",
-          borderBottomColor: "#137b9c",
+          backgroundColor: state.theme.surface,
+          borderBottomColor: state.theme.primary,
         },
       ]}
     >
@@ -118,7 +121,7 @@ const FriendRequest = () => {
           style={[
             styles.nameTextContainer,
             {
-              color: "#000000",
+              color: state.theme.onSurface,
             },
           ]}
         >
@@ -148,7 +151,10 @@ const FriendRequest = () => {
       {loading ? (
         <Loading />
       ) : (
-        <Text numberOfLines={2} style={{ fontSize: 16, color: "#000000" }}>
+        <Text
+          numberOfLines={2}
+          style={{ fontSize: 16, color: state.theme.onBackground }}
+        >
           Não há novos pedidos de amizade
         </Text>
       )}
@@ -156,15 +162,27 @@ const FriendRequest = () => {
   );
 
   const renderHeaderComponent = () => (
-    <View style={[styles.userListContainer, { borderBottomColor: "#137b9c" }]}>
-      <Text style={[styles.userListTextContainer, { color: "#000000" }]}>
+    <View
+      style={[
+        styles.userListContainer,
+        { borderBottomColor: state.theme.primary },
+      ]}
+    >
+      <Text
+        style={[
+          styles.userListTextContainer,
+          { color: state.theme.onBackground },
+        ]}
+      >
         Pedidos de Amizade
       </Text>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+    <View
+      style={[styles.container, { backgroundColor: state.theme.background }]}
+    >
       <FlatList
         data={friendRequestList}
         renderItem={renderData}

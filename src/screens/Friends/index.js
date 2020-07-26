@@ -11,9 +11,11 @@ import firebase from "firebase";
 
 import UserImage from "../../components/UserImage";
 import Loading from "../../components/Loading";
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const Friends = ({ navigation }) => {
+  const [state] = useStateValue();
   const [friendList, setFriendList] = useState("");
   const [loading, setLoading] = useState(true);
   const [appState, setAppState] = useState(AppState.currentState);
@@ -106,8 +108,8 @@ const Friends = ({ navigation }) => {
       style={[
         styles.userContainer,
         {
-          backgroundColor: "#ededed",
-          borderBottomColor: "#137b9c",
+          backgroundColor: state.theme.surface,
+          borderBottomColor: state.theme.primary,
         },
       ]}
     >
@@ -129,7 +131,7 @@ const Friends = ({ navigation }) => {
           style={[
             styles.status,
             {
-              borderColor: "#ededed",
+              borderColor: state.theme.surface,
               backgroundColor: item.status === "online" ? "#2ed411" : "#e62f22",
             },
           ]}
@@ -141,7 +143,7 @@ const Friends = ({ navigation }) => {
           style={[
             styles.nameTextContainer,
             {
-              color: "#000000",
+              color: state.theme.onSurface,
             },
           ]}
         >
@@ -156,7 +158,10 @@ const Friends = ({ navigation }) => {
       {loading ? (
         <Loading />
       ) : (
-        <Text numberOfLines={2} style={{ fontSize: 16, color: "#000000" }}>
+        <Text
+          numberOfLines={2}
+          style={{ fontSize: 16, color: state.theme.onBackground }}
+        >
           Não há ninguém em sua lista de amigos
         </Text>
       )}
@@ -164,15 +169,27 @@ const Friends = ({ navigation }) => {
   );
 
   const renderHeaderComponent = () => (
-    <View style={[styles.userListContainer, { borderBottomColor: "#137b9c" }]}>
-      <Text style={[styles.userListTextContainer, { color: "#000000" }]}>
+    <View
+      style={[
+        styles.userListContainer,
+        { borderBottomColor: state.theme.primary },
+      ]}
+    >
+      <Text
+        style={[
+          styles.userListTextContainer,
+          { color: state.theme.onBackground },
+        ]}
+      >
         Lista de Amigos
       </Text>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+    <View
+      style={[styles.container, { backgroundColor: state.theme.background }]}
+    >
       <FlatList
         data={friendList}
         renderItem={renderData}

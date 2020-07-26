@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import firebase from "firebase";
 
 import AppScreen from "./AppStack";
 import AuthStack from "./AuthStack";
 import Loading from "../components/Loading";
+import { useStateValue } from "../state/ContextProvider";
 
 const RootStack = createStackNavigator();
 
@@ -32,6 +37,7 @@ const RootStackScreen = ({ userToken }) => (
 );
 
 const AuthNavigator = () => {
+  const [state] = useStateValue();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,7 +57,7 @@ const AuthNavigator = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={state.theme.dark ? DarkTheme : DefaultTheme}>
       <RootStackScreen userToken={user} />
     </NavigationContainer>
   );

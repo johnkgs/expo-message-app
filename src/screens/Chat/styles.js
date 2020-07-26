@@ -16,6 +16,7 @@ export default StyleSheet.create({
     height: 36,
     borderRadius: 18,
     overflow: "hidden",
+    backgroundColor: "#f0f0f0",
   },
   userImage: {
     flex: 1,
@@ -55,10 +56,11 @@ export default StyleSheet.create({
     marginHorizontal: 5,
     paddingVertical: 5,
     borderRadius: 24,
-    backgroundColor: "#ffffff",
     lineHeight: 18,
     fontSize: 16,
     maxHeight: 100,
+    borderWidth: 1,
+    elevation: 5,
   },
   flatListContainer: {
     paddingTop: 5,

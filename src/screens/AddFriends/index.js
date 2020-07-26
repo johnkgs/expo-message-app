@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-
 import firebase from "firebase";
+import { Ionicons } from "@expo/vector-icons";
+
 import CustomInput from "../../components/CustomInput";
 import UserImage from "../../components/UserImage";
-
-import { Ionicons } from "@expo/vector-icons";
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const AddFriends = ({ navigation }) => {
+  const [state] = useStateValue();
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
 
@@ -48,8 +49,8 @@ const AddFriends = ({ navigation }) => {
           style={[
             styles.userContainer,
             {
-              backgroundColor: "#ededed",
-              borderBottomColor: "#137b9c",
+              backgroundColor: state.theme.surface,
+              borderBottomColor: state.theme.primary,
             },
           ]}
         >
@@ -72,7 +73,7 @@ const AddFriends = ({ navigation }) => {
               style={[
                 styles.nameTextContainer,
                 {
-                  color: "#000000",
+                  color: state.theme.onSurface,
                 },
               ]}
             >
@@ -85,13 +86,15 @@ const AddFriends = ({ navigation }) => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+    <View
+      style={[styles.container, { backgroundColor: state.theme.background }]}
+    >
       <View
         style={[
           styles.inputContainer,
           {
-            borderColor: "#137b9c",
-            backgroundColor: "#ffffff",
+            borderColor: state.theme.primary,
+            backgroundColor: state.theme.inputBackground,
           },
         ]}
       >
@@ -99,10 +102,11 @@ const AddFriends = ({ navigation }) => {
           returnKeyType="search"
           placeholder="Buscar amigo..."
           onChangeText={(text) => setSearchText(text)}
+          placeholderTextColor={state.theme.dark ? "#9e9e9e" : "#595959"}
           style={[
             styles.input,
             {
-              color: "#282828",
+              color: state.theme.onInputBackground,
             },
           ]}
           value={searchText}
@@ -111,7 +115,7 @@ const AddFriends = ({ navigation }) => {
           name="ios-search"
           style={{ padding: 10 }}
           size={24}
-          color="#000000"
+          color={state.theme.onSurface}
         />
       </View>
       <FlatList

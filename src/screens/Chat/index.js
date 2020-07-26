@@ -1,18 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, TextInput, FlatList, Keyboard, Image } from "react-native";
-
 import firebase from "firebase";
-import UserImage from "../../components/UserImage";
 
+import UserImage from "../../components/UserImage";
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const Chat = ({ navigation, route }) => {
-  const user = route.params;
-  const userUid = firebase.auth().currentUser.uid;
+  const [state] = useStateValue();
   const [textMessage, setTextMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [inputHeight, setInputHeight] = useState(48);
   const [keyboardIsShow, setKeyboardIsShow] = useState(false);
+
+  const user = route.params;
+  const userUid = firebase.auth().currentUser.uid;
 
   const messageData = firebase.database().ref("messages");
   const flatListRef = useRef();
@@ -36,7 +38,10 @@ const Chat = ({ navigation, route }) => {
             )}
           </View>
           <View style={styles.titleContainer}>
-            <Text style={styles.title} numberOfLines={1}>
+            <Text
+              style={[styles.title, { color: state.theme.onBackground }]}
+              numberOfLines={1}
+            >
               {user.name} {user.surname}
             </Text>
           </View>
@@ -67,11 +72,11 @@ const Chat = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    const keyboardShowListener = Keyboard.addListener("keyboardDidShow", (e) =>
+    const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () =>
       setKeyboardIsShow(true)
     );
 
-    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", (e) =>
+    const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () =>
       setKeyboardIsShow(false)
     );
 
@@ -115,7 +120,10 @@ const Chat = ({ navigation, route }) => {
         styles.messageContainer,
         {
           alignSelf: item.from === userUid ? "flex-end" : "flex-start",
-          backgroundColor: item.from === userUid ? "#17d47f" : "#2498bc",
+          backgroundColor:
+            item.from === userUid
+              ? state.theme.sendMessage
+              : state.theme.receiveMessage,
         },
       ]}
     >
@@ -143,19 +151,31 @@ const Chat = ({ navigation, route }) => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+    <View
+      style={[styles.container, { backgroundColor: state.theme.background }]}
+    >
       <View
-        style={[styles.sendMessageContainer, { backgroundColor: "#137b9c" }]}
+        style={[
+          styles.sendMessageContainer,
+          {
+            backgroundColor: state.theme.background,
+          },
+        ]}
       >
         <TextInput
           style={[
             styles.input,
-            { height: inputHeight > 48 ? inputHeight : 48 },
+            {
+              height: inputHeight > 48 ? inputHeight : 48,
+              backgroundColor: state.theme.inputBackground,
+              color: state.theme.onInputBackground,
+              borderColor: state.theme.primary,
+            },
           ]}
           value={textMessage}
           placeholder="Digite uma mensagem..."
           onChangeText={(text) => setTextMessage(text)}
-          placeholderTextColor="#595959"
+          placeholderTextColor={state.theme.dark ? "#9e9e9e" : "#595959"}
           onSubmitEditing={sendMessage}
           returnKeyType="send"
           multiline

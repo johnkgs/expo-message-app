@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Switch,
+  AsyncStorage,
+} from "react-native";
 import { ProgressBar } from "react-native-paper";
 
 import firebase from "firebase";
@@ -7,22 +15,25 @@ import "firebase/storage";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-
 import { Ionicons } from "@expo/vector-icons";
+
 import Loading from "../../components/Loading";
 import UserImage from "../../components/UserImage";
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const Profile = ({ navigation }) => {
+  const [state, dispatch] = useStateValue();
+
   const [name, setName] = useState(null);
   const [surname, setSurname] = useState(null);
-
-  const userData = firebase.database().ref("users");
-  const userUid = firebase.auth().currentUser.uid;
-
+  const [darkTheme, setDarkTheme] = useState(false);
   const [userImage, setUserImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [showProgressBar, setShowProgressBar] = useState(false);
+
+  const userUid = firebase.auth().currentUser.uid;
+  const userData = firebase.database().ref("users");
 
   const imageStorage = firebase.storage().ref();
   const loadingImageRef = useRef(false);
@@ -56,6 +67,25 @@ const Profile = ({ navigation }) => {
         setSurname(snapshot.val().surname);
         setUserImage(snapshot.val().userImage);
       });
+  };
+
+  useEffect(() => {
+    const getInitialState = async () => {
+      const darkThemeKey = await AsyncStorage.getItem("DarkThemeKey");
+
+      if (darkThemeKey === "true") {
+        setDarkTheme(true);
+      }
+    };
+
+    getInitialState();
+  }, []);
+
+  const switchTheme = () => {
+    dispatch({
+      type: !darkTheme ? "enableDarkTheme" : "disableDarkTheme",
+    });
+    setDarkTheme(!darkTheme);
   };
 
   const uriToBlob = (uri) => {
@@ -155,7 +185,12 @@ const Profile = ({ navigation }) => {
   return (
     <>
       {name && surname ? (
-        <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+        <View
+          style={[
+            styles.container,
+            { backgroundColor: state.theme.background },
+          ]}
+        >
           <View style={styles.imageBox}>
             <View style={styles.userImageContainer}>
               {userImage ? (
@@ -165,7 +200,7 @@ const Profile = ({ navigation }) => {
                   style={styles.userImage}
                 />
               ) : (
-                <UserImage size={120} />
+                <UserImage size={116} />
               )}
             </View>
             <TouchableOpacity
@@ -181,9 +216,14 @@ const Profile = ({ navigation }) => {
                 <ProgressBar
                   style={styles.progressBar}
                   progress={progress}
-                  color={"#137b9c"}
+                  color={state.theme.primary}
                 />
-                <Text style={[styles.progressBarText, { color: "#000000" }]}>
+                <Text
+                  style={[
+                    styles.progressBarText,
+                    { color: state.theme.onBackground },
+                  ]}
+                >
                   {Math.floor(progress * 100)}%
                 </Text>
               </View>
@@ -195,7 +235,7 @@ const Profile = ({ navigation }) => {
                 style={[
                   styles.textHalfContainer,
                   {
-                    color: "#000000",
+                    color: state.theme.onBackground,
                   },
                 ]}
               >
@@ -207,7 +247,7 @@ const Profile = ({ navigation }) => {
                 style={[
                   styles.textHalfContainer,
                   {
-                    color: "#000000",
+                    color: state.theme.onBackground,
                   },
                 ]}
               >
@@ -221,14 +261,17 @@ const Profile = ({ navigation }) => {
                 style={[
                   styles.inputContainer,
                   {
-                    borderColor: "#137b9c",
-                    backgroundColor: "#ffffff",
+                    borderColor: state.theme.primary,
+                    backgroundColor: state.theme.inputBackground,
                   },
                 ]}
               >
                 <Text
                   numberOfLines={1}
-                  style={[styles.input, { color: "#000000" }]}
+                  style={[
+                    styles.input,
+                    { color: state.theme.onInputBackground },
+                  ]}
                 >
                   {name}
                 </Text>
@@ -239,26 +282,57 @@ const Profile = ({ navigation }) => {
                 style={[
                   styles.inputContainer,
                   {
-                    borderColor: "#137b9c",
-                    backgroundColor: "#ffffff",
+                    borderColor: state.theme.primary,
+                    backgroundColor: state.theme.inputBackground,
                   },
                 ]}
               >
                 <Text
                   numberOfLines={1}
-                  style={[styles.input, { color: "#000000" }]}
+                  style={[
+                    styles.input,
+                    { color: state.theme.onInputBackground },
+                  ]}
                 >
                   {surname}
                 </Text>
               </View>
             </View>
           </View>
+
+          <View style={styles.darkThemeContainer}>
+            <Ionicons
+              name="md-contrast"
+              size={24}
+              color={state.theme.onBackground}
+            />
+            <Text
+              style={[
+                styles.darkThemeTextContainer,
+                {
+                  color: state.theme.onBackground,
+                },
+              ]}
+            >
+              Tema escuro
+            </Text>
+            <Switch
+              value={darkTheme}
+              onValueChange={switchTheme}
+              trackColor={{
+                true: state.theme.surface,
+                false: state.theme.surface,
+              }}
+              thumbColor={state.theme.primary}
+            />
+          </View>
+
           <View style={styles.logoutButtonContainer}>
             <TouchableOpacity
               style={[
                 styles.logoutButton,
                 {
-                  backgroundColor: "#137b9c",
+                  backgroundColor: state.theme.primary,
                 },
               ]}
               onPress={() => navigation.navigate("Logout")}

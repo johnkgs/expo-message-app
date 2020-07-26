@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import firebase from "firebase";
+import { Ionicons } from "@expo/vector-icons";
 
 import UserImage from "../../components/UserImage";
 import Loading from "../../components/Loading";
-import { Ionicons } from "@expo/vector-icons";
-
+import { useStateValue } from "../../state/ContextProvider";
 import styles from "./styles";
 
 const ProfileToFriendRequest = ({ navigation, route }) => {
+  const [state] = useStateValue();
   const [friend, setFriend] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const userUid = firebase.auth().currentUser.uid;
   const user = route.params;
 
   const friendRequestData = firebase.database().ref("friendRequest");
-
   const friendsData = firebase
     .database()
     .ref("friends")
@@ -34,7 +34,7 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
       }
     });
 
-    setLoading(true);
+    setLoading(false);
 
     return () => {
       isMounted = false;
@@ -68,16 +68,23 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
   return (
     <>
       {loading ? (
-        <View style={[styles.container, { backgroundColor: "#fcfcfc" }]}>
+        <Loading />
+      ) : (
+        <View
+          style={[
+            styles.container,
+            { backgroundColor: state.theme.background },
+          ]}
+        >
           <>
             {friend ? (
               <View
                 style={[
                   styles.alreadyFriendsContainer,
-                  { backgroundColor: "#fcfcfc" },
+                  { backgroundColor: state.theme.background },
                 ]}
               >
-                <Text style={{ color: "#000000", fontSize: 20 }}>
+                <Text style={{ color: state.theme.onBackground, fontSize: 20 }}>
                   Você e{" "}
                   <Text style={styles.alreadyFriendsTextContainer}>
                     {user.name} {user.surname}
@@ -106,14 +113,17 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
                       style={[
                         styles.inputContainer,
                         {
-                          backgroundColor: "#ffffff",
-                          borderColor: "#137b9c",
+                          backgroundColor: state.theme.inputBackground,
+                          borderColor: state.theme.primary,
                         },
                       ]}
                     >
                       <Text
                         numberOfLines={1}
-                        style={[styles.input, { color: "#000000" }]}
+                        style={[
+                          styles.input,
+                          { color: state.theme.onInputBackground },
+                        ]}
                       >
                         {user.name}
                       </Text>
@@ -124,14 +134,17 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
                       style={[
                         styles.inputContainer,
                         {
-                          backgroundColor: "#ffffff",
-                          borderColor: "#137b9c",
+                          backgroundColor: state.theme.inputBackground,
+                          borderColor: state.theme.primary,
                         },
                       ]}
                     >
                       <Text
                         numberOfLines={1}
-                        style={[styles.input, { color: "#000000" }]}
+                        style={[
+                          styles.input,
+                          { color: state.theme.onInputBackground },
+                        ]}
                       >
                         {user.surname}
                       </Text>
@@ -140,7 +153,10 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
                 </View>
 
                 <TouchableOpacity
-                  style={[styles.addButton, { backgroundColor: "#137b9c" }]}
+                  style={[
+                    styles.addButton,
+                    { backgroundColor: state.theme.primary },
+                  ]}
                   onPress={sendFriendRequest}
                 >
                   <Text style={styles.addButtonText}>Adicionar</Text>
@@ -150,8 +166,6 @@ const ProfileToFriendRequest = ({ navigation, route }) => {
             )}
           </>
         </View>
-      ) : (
-        <Loading />
       )}
     </>
   );

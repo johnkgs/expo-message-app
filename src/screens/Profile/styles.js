@@ -72,6 +72,17 @@ export default StyleSheet.create({
     fontSize: 16,
     textTransform: "capitalize",
   },
+  darkThemeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: 5,
+    marginBottom: 5,
+    marginTop: 20,
+  },
+  darkThemeTextContainer: {
+    fontSize: 16,
+    marginHorizontal: 5,
+  },
   logoutButtonContainer: {
     alignItems: "center",
   },
