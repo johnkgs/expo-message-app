@@ -88,12 +88,9 @@ const Chat = ({ navigation, route }) => {
 
   const convertTime = (time) => {
     let d = new Date(time);
-    let c = new Date();
     let result = (d.getHours() < 10 ? "0" : "") + d.getHours() + ":";
     result += (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
-    if (c.getDate() !== d.getDate()) {
-      result = d.getDay() + " " + d.getMonth() + " " + result;
-    }
+
     return result;
   };
 
