@@ -1,6 +1,8 @@
 # ![Logo](src/assets/logo.png) MessageApp
 Um aplicativo de mensagem simples utilizando Expo + Firebase
 
+![GitHub top language](https://img.shields.io/github/languages/top/JohnKGS/expo-message-app)
+
 Login                      |  Signup
 :-------------------------:|:-------------------------:
 ![Login](src/assets/demo/login.jpg)  |  ![Signup](src/assets/demo/signup.jpg)
@@ -48,4 +50,4 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Formik + Yup](https://formik.org/)
 - [Styled Components](https://styled-components.com/)
 
-Desenvolvido por John Kelvin
+Desenvolvido por John Kelvin Gonçalves de Souza
